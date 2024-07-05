@@ -12,13 +12,6 @@ from cinema.models import (
 )
 
 
-class MovieImageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Movie
-        fields = ("id", "image")
-
-
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
@@ -37,10 +30,18 @@ class CinemaHallSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "rows", "seats_in_row", "capacity")
 
 
-class MovieSerializer(serializers.ModelSerializer):
+class MovieImageSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Movie
-        fields = ("id", "title", "description", "duration", "genres", "actors", "image")
+        fields = ("id", "image")
+
+
+class MovieSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Movie
+        fields = ("id", "title", "description", "duration", "genres", "actors",)
 
 
 class MovieListSerializer(MovieSerializer):
@@ -50,7 +51,10 @@ class MovieListSerializer(MovieSerializer):
     actors = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="full_name"
     )
-    image = MovieImageSerializer
+
+    class Meta:
+        model = Movie
+        fields = ("id", "title", "description", "duration", "genres", "actors", "image")
 
 
 class MovieDetailSerializer(MovieSerializer):
